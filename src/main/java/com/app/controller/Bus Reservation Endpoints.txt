@@ -1,0 +1,521 @@
+Admin Controller :
+-----------
+POST http://localhost:8080/admin
+Json:
+{
+    "adminUserName": "adminUser",
+    "adminPassword": "securePassword123"
+}
+output return:
+{
+    "adminId": 1,
+    "adminUserName": "adminUser",
+    "adminPassword": "securePassword123"
+}
+----
+{
+    "adminUserName": "adminUser1",
+    "adminPassword": "securePass"
+}
+
+**********
+LoginAdminController 
+------------------
+Login Admin (POST /loginadmin)
+URL: http://localhost:8080/loginadmin
+Method: POST
+Headers:
+Content-Type: application/json
+Body:
+{
+    "username": "adminUser",
+    "password": "securePassword123"
+}
+Response: ----->----------------currentUserSession [userId=2, uuid=xXe9dg, localDateTime=2024-08-01T11:15:16.809366200] .... use uuid for logout
+{ 
+    "message": "Login successful"
+} 
+
+Logout Admin (POST /logoutadmin/{key})
+URL: http://localhost:8080/logoutadmin/someSessionKey
+Method: POST
+Headers:
+Content-Type: application/json
+Response:   ----->------------Logged Out !
+{
+    "message": "Logout successful"
+}
+
+
+*************
+RouteController
+--------------
+1. View All Routes
+Endpoint: GET /route/viewAll
+Response:(JSON)
+[
+  {
+    "routeId": 1,
+    "routeFrom": "City A",
+    "routeTo": "City B",
+    "distance": 150,
+    "bus": []
+  },
+  {
+    "routeId": 2,
+    "routeFrom": "City C",
+    "routeTo": "City D",
+    "distance": 200,
+    "bus": []
+  }
+]
+
+2. Create a New Route
+Endpoint: POST /route/save/{key}
+Request Body (JSON):
+{
+  "routeFrom": "Bengaluru City",
+  "routeTo": "Hyderabad City",
+  "distance": 250
+}
+
+Response:
+{
+  "routeId": 3,
+  "routeFrom": "City E",
+  "routeTo": "City F",
+  "distance": 250,
+  "bus": []
+}
+
+3. Get Route by ID
+Endpoint: GET /route/find/{routeId}
+Response:
+{
+  "routeId": 1,
+  "routeFrom": "City A",
+  "routeTo": "City B",
+  "distance": 150,
+  "bus": []
+}
+
+4. Update Route
+Endpoint: PUT /route/update/{key}
+Request Body (JSON):
+{
+  "routeId": 1,
+  "routeFrom": "City A",
+  "routeTo": "City B Updated",
+  "distance": 160
+}
+
+Response:
+{
+  "routeId": 1,
+  "routeFrom": "City A",
+  "routeTo": "City B Updated",
+  "distance": 160,
+  "bus": []
+}
+
+5. Delete Route by ID
+Endpoint: DELETE /route/delet/{routeId}/{key}
+Response:
+Status Code: 204 No Content
+
+***************
+1. Create a New Bus
+Endpoint: POST http://localhost:8080/save/{key}
+Path Variable: key (example: adminKey)
+Description: Creates a new bus entry.
+Request Body (JSON):
+{
+  "busName": "City Express",
+  "driverName": "John Doe",
+  "busType": "Luxury",
+  "routeFrom": "Bengaluru City",
+  "routeTo": "Hyderabad City",
+  "arrivalTime": "15:30:00",
+  "departureTime": "14:00:00",
+  "farePerSeat": 50,
+  "seats": 40,
+  "availableSeats": 25
+}
+
+2. Get Bus by ID
+Endpoint: GET http://localhost:8080/find/{busId}
+Description: Retrieves a bus entry by its ID.
+Path Variable: busId (example: 1)
+
+3. Update a Bus
+Endpoint: PUT http://localhost:8080/update/{key}
+Description: Updates an existing bus entry.
+Request Body (JSON):
+{
+  "busId": 1,
+  "busName": "City Express Updated",
+  "driverName": "Jane Doe",
+  "busType": "Luxury",
+  "routeFrom": "Downtown",
+  "routeTo": "Airport",
+  "arrivalTime": "16:00:00",
+  "departureTime": "14:30:00",
+  "farePerSeat": 55,
+  "seats": 40,
+  "availableSeats": 20
+}
+Path Variable: key (example: adminKey)
+
+4. Delete a Bus
+Endpoint: DELETE http://localhost:8080/delet/{busId}/{key}
+Description: Deletes a bus entry by its ID.
+Path Variable:
+busId (example: 1)
+key (example: adminKey)
+
+5. Get Buses by Type
+Endpoint: GET http://localhost:8080/buses/{busType}
+Description: Retrieves a list of buses filtered by type.
+Path Variable: busType (example: Luxury)
+
+6. Get All Buses
+Endpoint: GET http://localhost:8080/buses
+Description: Retrieves a list of all buses.
+Request Body: None
+
+******************* complete test in postman
+FeedBackController
+------------------
+Create Feedback (POST /feedback/save/{busid}/{key})
+URL: http://localhost:8080/feedback/save/1/somekey
+Method: POST
+Headers:
+Content-Type: application/json
+{
+    "driverRating": 4,
+    "serviceRating": 5,
+    "overallRating": 4,
+    "comments": "The bus service was excellent.",
+    "feedbackDate": "2024-08-01"
+}
+
+Get All Feedback (GET /feedback/viewAll)
+URL: http://localhost:8080/feedback/viewAll
+Method: GET
+Headers:
+Accept: application/json
+Response:
+[
+    {
+        "feedbackId": 1,
+        "driverRating": 4,
+        "serviceRating": 5,
+        "overallRating": 4,
+        "comments": "The bus service was excellent.",
+        "feedbackDate": "2024-08-01",
+        "users": {
+            "userId": 1,
+            "username": "user1"
+        },
+        "bus": {
+            "busId": 1,
+            "busName": "Bus A"
+        }
+    }
+]
+
+Get Feedback by ID (GET /feedback/find/{feedbackId})
+URL: http://localhost:8080/feedback/find/1
+Method: GET
+Headers:
+Accept: application/json
+Response:
+{
+    "feedbackId": 1,
+    "driverRating": 4,
+    "serviceRating": 5,
+    "overallRating": 4,
+    "comments": "The bus service was excellent.",
+    "feedbackDate": "2024-08-01",
+    "users": {
+        "userId": 1,
+        "username": "user1"
+    },
+    "bus": {
+        "busId": 1,
+        "busName": "Bus A"
+    }
+}
+
+Update Feedback (PUT /feedback/update/{key})
+URL: http://localhost:8080/feedback/update/somekey
+Method: PUT
+Headers:
+Content-Type: application/json
+Body:
+{
+    "feedbackId": 1,
+    "driverRating": 5,
+    "serviceRating": 5,
+    "overallRating": 5,
+    "comments": "The service improved significantly.",
+    "feedbackDate": "2024-08-02"
+}
+
+*****************
+LoginController 
+--------------
+Login User (POST /loginuser)
+URL: http://localhost:8080/loginuser
+Method: POST
+Headers:
+Content-Type: application/json
+Body:
+{
+    "username": "user1",
+    "password": "password123"
+}
+Response:
+{
+    "message": "Login successful"
+}
+
+Logout User (POST /logoutuser/{key})
+URL: http://localhost:8080/logoutuser/someSessionKey
+Method: POST
+Headers:
+Content-Type: application/json
+Response:
+{
+    "message": "Logout successful"
+}
+
+**********************
+UserController
+-----------
+1. Register a New User
+Endpoint:
+POST /users
+Request Body (JSON):
+{
+  "userName": "john_doe",
+  "password": "password123",
+  "firstName": "John",
+  "lastName": "Doe",
+  "contact": 1234567890,
+  "email": "john.doe@example.com"
+}
+Response:(json)
+{
+  "userLoginId": 1,
+  "userName": "john_doe",
+  "password": "password123",
+  "firstName": "John",
+  "lastName": "Doe",
+  "contact": 1234567890,
+  "email": "john.doe@example.com"
+}
+
+2. Update User Details
+Endpoint:
+PUT /users/{key}
+Request Body (JSON):
+{
+  "userLoginId": 1,
+  "userName": "john_doe_updated",
+  "password": "newpassword123",
+  "firstName": "Johnathan",
+  "lastName": "Doe",
+  "contact": 9876543210,
+  "email": "johnathan.doe@example.com"
+}
+Response : (JSON)
+{
+  "userLoginId": 1,
+  "userName": "john_doe_updated",
+  "password": "newpassword123",
+  "firstName": "Johnathan",
+  "lastName": "Doe",
+  "contact": 9876543210,
+  "email": "johnathan.doe@example.com"
+}
+
+3. Delete a User
+Endpoint:
+DELETE /users/{id}/{key}
+Response:
+Status Code: 204 No Content
+No body in response.
+
+4. View User by ID
+Endpoint:
+GET /users/{id}/{key}
+Response : (JSON)
+{
+  "userLoginId": 1,
+  "userName": "john_doe_updated",
+  "password": "newpassword123",
+  "firstName": "Johnathan",
+  "lastName": "Doe",
+  "contact": 9876543210,
+  "email": "johnathan.doe@example.com"
+}
+
+5. View All Users
+Endpoint:
+GET /users?key={key}
+Response:(JSON)
+[
+  {
+    "userLoginId": 1,
+    "userName": "john_doe_updated",
+    "password": "newpassword123",
+    "firstName": "Johnathan",
+    "lastName": "Doe",
+    "contact": 9876543210,
+    "email": "johnathan.doe@example.com"
+  },
+  {
+    "userLoginId": 2,
+    "userName": "jane_doe",
+    "password": "password456",
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "contact": 1231231234,
+    "email": "jane.doe@example.com"
+  }
+]
+
+******************
+
+*******************
+ReservationController
+--------------------
+1. Add a New Reservation
+Endpoint: POST /Reservation/{key} 
+Request Body (JSON):
+{
+  "reservationStatus": "Confirmed",
+  "reservationType": "Online",
+  "reservationDate": "2024-08-01",
+  "journeyDate": "2024-08-15",
+  "reservationTime": "14:30:00",
+  "source": "City A",
+  "destination": "City B",
+  "noOfSeatsBooked": 2,
+  "fare": 1000,
+  "bus": {
+    "busId": 1
+  },
+  "user": {
+    "userLoginId": 1
+  }
+}
+Response:
+{
+  "reservationId": 1,
+  "reservationStatus": "Confirmed",
+  "reservationType": "Online",
+  "reservationDate": "2024-08-01",
+  "journeyDate": "2024-08-15",
+  "reservationTime": "14:30:00",
+  "source": "City A",
+  "destination": "City B",
+  "noOfSeatsBooked": 2,
+  "fare": 1000,
+  "bus": {
+    "busId": 1
+  },
+  "user": {
+    "userLoginId": 1
+  }
+}
+
+2. Update an Existing Reservation
+Endpoint: PUT /Reservation/{key}
+Request Body (JSON):
+{
+  "reservationId": 1,
+  "reservationStatus": "Cancelled",
+  "reservationType": "Offline",
+  "reservationDate": "2024-08-01",
+  "journeyDate": "2024-08-20",
+  "reservationTime": "16:00:00",
+  "source": "City A",
+  "destination": "City B Updated",
+  "noOfSeatsBooked": 1,
+  "fare": 800,
+  "bus": {
+    "busId": 1
+  },
+  "user": {
+    "userLoginId": 1
+  }
+}
+Response:
+{
+  "reservationId": 1,
+  "reservationStatus": "Cancelled",
+  "reservationType": "Offline",
+  "reservationDate": "2024-08-01",
+  "journeyDate": "2024-08-20",
+  "reservationTime": "16:00:00",
+  "source": "City A",
+  "destination": "City B Updated",
+  "noOfSeatsBooked": 1,
+  "fare": 800,
+  "bus": {
+    "busId": 1
+  },
+  "user": {
+    "userLoginId": 1
+  }
+}
+
+3. Delete a Reservation
+Endpoint: DELETE /Reservation/{reservationId}/{key}
+Response:
+{
+  "reservationId": 1,
+  "reservationStatus": "Cancelled",
+  "reservationType": "Offline",
+  "reservationDate": "2024-08-01",
+  "journeyDate": "2024-08-20",
+  "reservationTime": "16:00:00",
+  "source": "City A",
+  "destination": "City B Updated",
+  "noOfSeatsBooked": 1,
+  "fare": 800,
+  "bus": {
+    "busId": 1
+  },
+  "user": {
+    "userLoginId": 1
+  }
+}
+Status Code: 200 OK
+
+4. View a Reservation by ID
+Endpoint: GET /Reservation/{reservationId}/{key}
+Response:
+{
+  "reservationId": 1,
+  "reservationStatus": "Cancelled",
+  "reservationType": "Offline",
+  "reservationDate": "2024-08-01",
+  "journeyDate": "2024-08-20",
+  "reservationTime": "16:00:00",
+  "source": "City A",
+  "destination": "City B Updated",
+  "noOfSeatsBooked": 1,
+  "fare": 800,
+  "bus": {
+    "busId": 1
+  },
+  "user": {
+    "userLoginId": 1
+  }
+}
+
+
+            
